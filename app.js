@@ -66,6 +66,7 @@ function filterPosts(e) {
   });
 }
 filter.addEventListener('input', filterPosts);
+filter.addEventListener('input', highlightSearchTerm)
 
 // Show initial posts
 
@@ -92,3 +93,17 @@ window.addEventListener('scroll', () => {
 //     showMore.style.display = 'block';
 //   }, 2000)
 // });
+
+function highlightSearchTerm() {
+  let searchTerm = filter.value
+  const posts = document.querySelectorAll('.post');
+  searchTerm  = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  let pattern = new RegExp(`${searchTerm}`, "gi");
+
+  posts.forEach(post => {
+    const title = post.querySelector('.post-title')
+    const body = post.querySelector('.post-body')
+    title.innerHTML = title.textContent.replace(pattern, match => `<mark>${match}</mark>`)
+    body.innerHTML = body.textContent.replace(pattern, match => `<mark>${match}</mark>`)
+  });
+}
